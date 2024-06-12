@@ -1,0 +1,77 @@
+version: '3.8'
+services:
+  nginx:
+    container_name: nginx
+    image: nginx
+    ports:
+      - "80:80"
+      - "3000:3000"
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./react-app/dist:/usr/share/nginx/html
+    networks:
+      - spring-cloud-network
+    environment:
+      - TZ=Asia/Seoul
+    depends_on:
+      - apigateway-service
+  apigateway-service:
+    container_name: billybang-apigateway-service
+    build:
+      context: ./apigateway-service
+      dockerfile: Dockerfile
+    image: billybang/apigateway-service
+    ports:
+      - "8000:8000"
+    restart: always
+    depends_on:
+      - rabbitmq
+      - discovery-service
+    networks:
+      - spring-cloud-network
+  discovery-service:
+    container_name: billybang-discovery-service
+    build:
+      context: ./discovery-service
+      dockerfile: Dockerfile
+    image: billybang/discovery-service
+    ports:
+      - "8761:8761"
+    restart: always
+    depends_on:
+      - rabbitmq
+    networks:
+      - spring-cloud-network
+  config-service:
+    container_name: billybang-config-service
+    build:
+      context: ./config-service
+      dockerfile: Dockerfile
+    image: billybang/config-service
+    ports:
+      - "8888:8888"
+    restart: always
+    depends_on :
+      - rabbitmq
+      - discovery-service
+    environment:
+      - ENCRYPT_KEY={ENCRYPT_KEY}
+    networks:
+      - spring-cloud-network
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - spring-cloud-network
+networks:
+  spring-cloud-network:
+    driver: bridge
