@@ -56,7 +56,7 @@ services:
       - rabbitmq
       - discovery-service
     environment:
-      - ENCRYPT_KEY={ENCRYPT_KEY}
+      - ENCRYPT_KEY=${ENCRYPT_KEY}
     networks:
       - spring-cloud-network
   rabbitmq:
