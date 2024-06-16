@@ -1,11 +1,5 @@
 server:
   port: 8000
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://discovery-service:8761/eureka/
 spring:
   application:
     name: apigateway-service
@@ -18,20 +12,43 @@ spring:
             preLogger: true
             postLogger: false
       routes:
+        # 유저 서비스
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/api/demo/**
+            - Path=/api/users/**
           filters:
-            - RemoveRequestHeader=Cookie
-            - RewritePath=/api/demo, /demo
-            - RewritePath=/api/demo/(?<segment>.*), /demo/$\{segment}
+            - RewritePath=/api/users, /users
+            - RewritePath=/api/users/(?<segment>.*), /users/$\{segment}
             - CustomFilter
+        # 매물 서비스
+        - id: property-service
+          uri: lb://PROPERTY-SERVICE
+          predicates:
+              - Path=/api/properties/**
+          filters:
+              - RewritePath=/api/properties, /properties
+              - RewritePath=/api/properties/(?<segment>.*), /properties/$\{segment}
+        # 대출 서비스
+        - id: loan-service
+          uri: lb://LOAN-SERVICE
+          predicates:
+              - Path=/api/loans/**
+          filters:
+              - RewritePath=/api/loans, /loans
+              - RewritePath=/api/loans/(?<segment>.*), /loans/$\{segment}
   rabbitmq:
     host: rabbitmq
     port: 5672
     username: guest
     password: guest
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka/
+
 management:
   endpoints:
     web:
