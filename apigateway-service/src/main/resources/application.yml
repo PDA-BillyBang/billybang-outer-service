@@ -54,3 +54,23 @@ management:
     web:
       exposure:
         include: refresh, health, beans, busrefresh
+---
+spring:
+  config:
+    activate:
+      on-profile: local-cloud
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+
+
