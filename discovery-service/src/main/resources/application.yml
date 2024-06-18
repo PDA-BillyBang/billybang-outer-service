@@ -5,6 +5,9 @@ spring:
   application:
     name: discovery-service
 eureka:
+  instance :
+    instance-id : ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    hostname : 3.39.52.110
   client:
     register-with-eureka: false
     fetch-registry: false
