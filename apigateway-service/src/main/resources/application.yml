@@ -45,7 +45,6 @@ spring:
 eureka:
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
-    hostname: 3.39.52.110
   client:
     register-with-eureka: true
     fetch-registry: true
@@ -71,7 +70,6 @@ spring:
 eureka:
   instance :
     instance-id : ${spring.application.name}:${spring.application.instance_id:${random.value}}
-    hostname : 3.39.52.110
   client:
     register-with-eureka: true
     fetch-registry: true
