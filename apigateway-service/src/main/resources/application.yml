@@ -16,10 +16,10 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/api/users/oauth2/**
-            - Method=GET
+            - Path=/api/**/oauth2/**
           filters:
-            - RewritePath=/api/users/oauth2/(?<segment>.*), /oauth2/$\{segment}
+            - RewritePath=/api/oauth2/(?<segment>.*), /oauth2/$\{segment}
+            - RewritePath=/api/login/oauth2/(?<segment>.*), /login/oauth2/$\{segment}
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
