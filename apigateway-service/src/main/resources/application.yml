@@ -21,6 +21,14 @@ spring:
             - RewritePath=/api/users, /users
             - RewritePath=/api/users/(?<segment>.*), /users/$\{segment}
             - CustomFilter
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/users/oauth2/**
+            - Method=GET
+          filters:
+            - RewritePath=/api/users/oauth2, /oauth2
+            - RewritePath=/api/users/oauth2/(?<segment>.*), /oauth2/$\{segment}
         # 매물 서비스
         - id: property-service
           uri: lb://PROPERTY-SERVICE
