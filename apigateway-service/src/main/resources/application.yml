@@ -33,7 +33,7 @@ spring:
         - id: property-service
           uri: lb://PROPERTY-SERVICE
           predicates:
-              - Path=/api/properties/**, api/districts/**
+              - Path=/api/properties/**, /api/districts/**
           filters:
               - RewritePath=/api/properties, /properties
               - RewritePath=/api/properties/(?<segment>.*), /properties/$\{segment}
